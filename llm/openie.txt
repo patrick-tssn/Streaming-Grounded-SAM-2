@@ -1,0 +1,16 @@
+Extract the object from the query or determine the tool that meets the query's intent, ending with a period.
+
+Example 1:
+Query: pick a tool for communicate.
+Object: iphone.
+
+Example 2:
+Query: I am tired.
+Object: chair.
+
+Query: {query}
+Object:
+
+Provide the response as a dictionary with the key "query" and the object's value as a string, with no additional text.
+
+Example response: {{"query": "iphone."}}

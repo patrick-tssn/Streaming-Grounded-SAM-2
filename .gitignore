@@ -1,0 +1,14 @@
+.vscode/
+.DS_Store
+__pycache__/
+*-checkpoint.ipynb
+.venv
+.env
+*.egg*
+build/*
+_C.*
+outputs/*
+checkpoints/*.pt
+gdino_checkpoints/*.pth
+gdino_checkpoints/grounding-dino*
+llm_checkpoints/Qwen2*
