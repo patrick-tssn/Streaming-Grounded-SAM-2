@@ -6,6 +6,13 @@ Grounded SAM 2 for streaming video tracking using natural language queries.
 ## Demo
 
 
+<div align=center>
+
+<p align="center">
+<img src="./assets/workstation.gif" width="320">
+</p>
+
+</div>
 
 ## Framework
 

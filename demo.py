@@ -77,7 +77,6 @@ async def main(model="gpt-4o-2024-05-13"):
     # init
     query_queue = collections.deque([])
     response_queue = collections.deque([])
-    grounding_queue = collections.deque([])
     if_init = False
     frame_list = [] # for visualization
     text = ""
@@ -176,20 +175,28 @@ async def main(model="gpt-4o-2024-05-13"):
         # Ensure tasks are running
         await asyncio.sleep(0)
 
-        # frame_list.append(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)) # required for gif
+        
         frame_list.append(frame)
         # result.write(frame)
         if cv2.waitKey(1) & 0xFF == ord("q"):
             break
 
-    cap.release()
+    
     # visualization 
-    # gif = imageio.mimsave("./result.gif", frame_list, "GIF")
-    h, w = frame_list[0].shape[:2][::-1]
-    video_handler = cv2.VideoWriter("result.mp4", cv2.VideoWriter_fourcc(*"MP4V"),25,(h,w))
-    for frame in frame_list:
-        video_handler.write(frame)
-    video_handler.release()
+    frame_list = [cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) for frame in frame_list]
+    gif = imageio.mimsave("./result.gif", frame_list, "GIF")
+    # w, h = frame_list[0].shape[:2][::-1]
+    # fps = cap.get(cv2.CAP_PROP_FPS)
+    # # video_handler = cv2.VideoWriter("result.mp4", cv2.VideoWriter_fourcc(*"MP4V"),25,(w,h))
+    # # video_handler = cv2.VideoWriter("result.mp4", cv2.VideoWriter_fourcc(*"XVID"),25,(w,h))
+    # video_handler = cv2.VideoWriter("result.mp4", cv2.VideoWriter_fourcc('m', 'p', '4', 'v'),int(fps),(w,h))
+    # # video_handler = cv2.VideoWriter("result.avi", cv2.VideoWriter_fourcc(*"XVID"),fps,(w,h))
+    # for frame in frame_list:
+    #     video_handler.write(frame)
+    # video_handler.release()
+    
+    cap.release()
+    cv2.destroyAllWindows()
 
 
 if __name__ == '__main__':
