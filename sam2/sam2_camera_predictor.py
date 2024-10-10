@@ -71,7 +71,7 @@ class SAM2CameraPredictor(SAM2Base):
         )
         img, width, height = self.perpare_data(img, image_size=self.image_size)
         self.condition_state["images"] = [img]
-        self.condition_state["num_frames"] = len(img)
+        self.condition_state["num_frames"] = len(self.condition_state["images"])
         self.condition_state["video_height"] = height
         self.condition_state["video_width"] = width
         self._get_image_feature(frame_idx=0, batch_size=1)
@@ -191,7 +191,7 @@ class SAM2CameraPredictor(SAM2Base):
         labels=None,
         clear_old_points=True,
         normalize_coords=True,
-        box=None
+        box=None,
     ):
         """Add new points to a frame."""
         obj_idx = self._obj_id_to_idx(obj_id)
@@ -202,7 +202,7 @@ class SAM2CameraPredictor(SAM2Base):
             raise ValueError("points and labels must be provided together")
         if points is None and box is None:
             raise ValueError("at least one of points or box must be provided as input")
-        
+
         if points is None:
             points = torch.zeros(0, 2, dtype=torch.float32, device=box.device)
         elif not isinstance(points, torch.Tensor):
@@ -215,7 +215,7 @@ class SAM2CameraPredictor(SAM2Base):
             points = points.unsqueeze(0)  # add batch dimension
         if labels.dim() == 1:
             labels = labels.unsqueeze(0)  # add batch dimension
-        
+
         # If `box` is provided, we add it as the first two points with labels 2 and 3
         # along with the user-provided points (consistent with how SAM 2 is trained).
         if box is not None:
@@ -233,8 +233,6 @@ class SAM2CameraPredictor(SAM2Base):
             points = torch.cat([box_coords, points], dim=1)
             labels = torch.cat([box_labels, labels], dim=1)
 
-        
-        
         if normalize_coords:
             video_H = self.condition_state["video_height"]
             video_W = self.condition_state["video_width"]
@@ -588,7 +586,6 @@ class SAM2CameraPredictor(SAM2Base):
             current_vision_pos_embeds,
             feat_sizes,
         ) = self._get_feature(img, batch_size)
-
 
         current_out = self.track_step(
             frame_idx=self.frame_idx,
